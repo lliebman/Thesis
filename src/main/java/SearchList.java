@@ -19,6 +19,8 @@ import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
 import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.googleapis.json.GoogleJsonResponseException;
+import com.google.api.client.http.HttpRequest;
+import com.google.api.client.http.HttpRequestInitializer;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
@@ -32,14 +34,16 @@ import java.io.InputStreamReader;
 import java.security.GeneralSecurityException;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Properties;
 
 public class SearchList {
-    private static final String CLIENT_SECRETS= "client_secret.json";
+   /// private static final String CLIENT_SECRETS= "client_secret.json";
     private static final Collection<String> SCOPES =
             Arrays.asList("https://www.googleapis.com/auth/youtube.readonly");
 
     private static final String APPLICATION_NAME = "API code samples";
     private static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
+    private static final String PROPERTIES_FILENAME = "youtube.properties";
 
     /**
      * Create an authorized Credential object.
@@ -47,7 +51,7 @@ public class SearchList {
      * @return an authorized Credential object.
      * @throws IOException
      */
-    public static Credential authorize(final NetHttpTransport httpTransport) throws IOException {
+/*    public static Credential authorize(final NetHttpTransport httpTransport) throws IOException {
         // Load client secrets.
         InputStream in = SearchList.class.getResourceAsStream(CLIENT_SECRETS);
         GoogleClientSecrets clientSecrets =
@@ -59,7 +63,7 @@ public class SearchList {
         Credential credential =
                 new AuthorizationCodeInstalledApp(flow, new LocalServerReceiver()).authorize("user");
         return credential;
-    }
+    }*/
 
     /**
      * Build and return an authorized API client service.
@@ -67,13 +71,13 @@ public class SearchList {
      * @return an authorized API client service
      * @throws GeneralSecurityException, IOException
      */
-    public static YouTube getService() throws GeneralSecurityException, IOException {
+/*    public static YouTube getService() throws GeneralSecurityException, IOException {
         final NetHttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
         Credential credential = authorize(httpTransport);
         return new YouTube.Builder(httpTransport, JSON_FACTORY, credential)
                 .setApplicationName(APPLICATION_NAME)
                 .build();
-    }
+    }*/
 
     /**
      * Call function to create API service object. Define and
@@ -83,11 +87,22 @@ public class SearchList {
      */
     public static void main(String[] args)
             throws GeneralSecurityException, IOException, GoogleJsonResponseException {
-        YouTube youtubeService = getService();
+        Properties properties = new Properties();
+        InputStream in = SearchExample.class.getResourceAsStream("/" + PROPERTIES_FILENAME);
+        properties.load(in);
+
+        //YouTube youtubeService = getService();
+
+        YouTube youtube = new YouTube.Builder(GoogleNetHttpTransport.newTrustedTransport(), JacksonFactory.getDefaultInstance(), new HttpRequestInitializer() {
+            public void initialize(HttpRequest request) throws IOException {
+            }
+        }).setApplicationName("youtube-cmdline-search-sample").build();
+
         // Define and execute the API request
-        YouTube.Search.List request = youtubeService.search()
+        YouTube.Search.List request = youtube.search()
                 .list("snippet");
-        SearchListResponse response = request.setLocation("21.5922529,-158.1147114")
+        SearchListResponse response = request.setKey("AIzaSyAPRIcytbxIpj3AH8O_TD3hZsoaOdVK7Jo")
+                .setLocation("21.5922529,-158.1147114")
                 .setLocationRadius("10mi")
                 .setQ("surfing")
                 .setType("video")
