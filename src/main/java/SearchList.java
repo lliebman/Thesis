@@ -1,7 +1,15 @@
 /**
- * Sample Java code for youtube.videos.list
+ * Sample Java code for youtube.search.list
  * See instructions for running these code samples locally:
  * https://developers.google.com/explorer-help/guides/code_samples#java
+ *
+ *
+ * This example retrieves search results associated with the keyword surfing that also specify in
+ * their metadata a geographic location within 10 miles of the point identified by the location parameter
+ * value. (The sample request specifies a point on the North Shore of Oahu, Hawaii .
+ * The request retrieves the top five results, which is the default number returned when the maxResults
+ * parameter is not specified.
+ *
  */
 
 import com.google.api.client.auth.oauth2.Credential;
@@ -16,7 +24,7 @@ import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
 
 import com.google.api.services.youtube.YouTube;
-import com.google.api.services.youtube.model.VideoListResponse;
+import com.google.api.services.youtube.model.SearchListResponse;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -25,7 +33,7 @@ import java.security.GeneralSecurityException;
 import java.util.Arrays;
 import java.util.Collection;
 
-public class ApiExample {
+public class SearchList {
     private static final String CLIENT_SECRETS= "client_secret.json";
     private static final Collection<String> SCOPES =
             Arrays.asList("https://www.googleapis.com/auth/youtube.readonly");
@@ -41,7 +49,7 @@ public class ApiExample {
      */
     public static Credential authorize(final NetHttpTransport httpTransport) throws IOException {
         // Load client secrets.
-        InputStream in = ApiExample.class.getResourceAsStream(CLIENT_SECRETS);
+        InputStream in = SearchList.class.getResourceAsStream(CLIENT_SECRETS);
         GoogleClientSecrets clientSecrets =
                 GoogleClientSecrets.load(JSON_FACTORY, new InputStreamReader(in));
         // Build flow and trigger user authorization request.
@@ -77,9 +85,13 @@ public class ApiExample {
             throws GeneralSecurityException, IOException, GoogleJsonResponseException {
         YouTube youtubeService = getService();
         // Define and execute the API request
-        YouTube.Videos.List request = youtubeService.videos()
-                .list("snippet,contentDetails,statistics");
-        VideoListResponse response = request.setId("Ks-_Mh1QhMc,c0KYU2j0TM4,eIho2S0ZahI").execute();
+        YouTube.Search.List request = youtubeService.search()
+                .list("snippet");
+        SearchListResponse response = request.setLocation("21.5922529,-158.1147114")
+                .setLocationRadius("10mi")
+                .setQ("surfing")
+                .setType("video")
+                .execute();
         System.out.println(response);
     }
 }

@@ -12,6 +12,10 @@
  * the License.
  */
 
+/**
+ * Found this example. It uses an API key instead of OAuth 2.0 Client ID
+ */
+
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.googleapis.json.GoogleJsonResponseException;
 import com.google.api.client.http.HttpRequest;
@@ -36,7 +40,7 @@ import java.util.Properties;
  *
  * @author Jeremy Walker
  */
-public class Xlam {
+public class SearchExample {
 
     /**
      * Define a global variable that identifies the name of a file that
@@ -58,18 +62,11 @@ public class Xlam {
      *
      * @param args command line args.
      */
-    public static void main(String[] args) {
-/*        // Read the developer key from the properties file.
+    public static void main(String[] args) throws IOException {
+        // Read the developer key from the properties file.
         Properties properties = new Properties();
-        try {
-          //  InputStream in = Xlam.class.getResourceAsStream("/" + PROPERTIES_FILENAME);
-          //  properties.load(in);
-
-        } catch (IOException e) {
-            System.err.println("There was an error reading " + PROPERTIES_FILENAME + ": " + e.getCause()
-                    + " : " + e.getMessage());
-            System.exit(1);
-        }*/
+          InputStream in = SearchExample.class.getResourceAsStream("/" + PROPERTIES_FILENAME);
+          properties.load(in);
 
         try {
             // This object is used to make YouTube Data API requests. The last
