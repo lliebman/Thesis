@@ -46,7 +46,7 @@ public class SearchExample {
      * Define a global variable that identifies the name of a file that
      * contains the developer's API key.
      */
-    private static final String PROPERTIES_FILENAME = "youtube.properties";
+    private static final String API_KEY = BuildConfig.API_KEY;
 
     private static final long NUMBER_OF_VIDEOS_RETURNED = 25;
 
@@ -65,7 +65,7 @@ public class SearchExample {
     public static void main(String[] args) throws IOException {
         // Read the developer key from the properties file.
         Properties properties = new Properties();
-          InputStream in = SearchExample.class.getResourceAsStream("/" + PROPERTIES_FILENAME);
+          InputStream in = SearchExample.class.getResourceAsStream("/" + API_KEY);
           properties.load(in);
 
         try {

@@ -43,7 +43,7 @@ public class SearchList {
 
     private static final String APPLICATION_NAME = "API code samples";
     private static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
-    private static final String PROPERTIES_FILENAME = "youtube.properties";
+    private static final String API_KEY = BuildConfig.API_KEY;
 
     /**
      * Create an authorized Credential object.
@@ -88,7 +88,7 @@ public class SearchList {
     public static void main(String[] args)
             throws GeneralSecurityException, IOException, GoogleJsonResponseException {
         Properties properties = new Properties();
-        InputStream in = SearchExample.class.getResourceAsStream("/" + PROPERTIES_FILENAME);
+        InputStream in = SearchExample.class.getResourceAsStream("/" + API_KEY);
         properties.load(in);
 
         //YouTube youtubeService = getService();
